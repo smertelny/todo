@@ -1,0 +1,7 @@
+# ignore Python compiled files
+__pycache__/
+*.pyc
+.pylintrc
+
+# ignore VS Code settings
+.vscode/

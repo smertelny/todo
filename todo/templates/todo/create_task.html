@@ -1,0 +1,12 @@
+{% extends 'todo/base.html' %}
+
+{% block title %}Create new task{% endblock title %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">submit</button>
+</form>
+
+{% endblock content %}

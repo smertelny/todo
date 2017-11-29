@@ -3,15 +3,25 @@
 {% block title %} TODO list {% endblock title %}
 
 {% block content %}
-{% if data %}
-<ul>
-  {% for item in data %}
-  <li>Header: {{ item.header }}</li>
-  <li>Description: {{ item.description }}</li>
-  <li>Done: {{ item.isDone }}</li>
-  {% endfor %}
-</ul>
-{% else %}
-  There is no data here
-{% endif %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      {% if data %}
+      <ol>
+        {% for item in data %}
+        <li>
+          <ul>
+            <li><strong>Header:</strong> {{ item.header }}</li>
+            <li><strong>Description:</strong> {{ item.description }}</li>
+            <li><strong>Done:</strong> {{ item.isDone }}</li>
+          </ul>
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+        There is no data here
+      {% endif %}
+    </div>
+    </div>  
+</div>
 {% endblock content %}
