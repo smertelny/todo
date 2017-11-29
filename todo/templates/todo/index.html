@@ -1,0 +1,17 @@
+{% extends "todo/base.html" %}
+
+{% block title %} TODO list {% endblock title %}
+
+{% block content %}
+{% if data %}
+<ul>
+  {% for item in data %}
+  <li>Header: {{ item.header }}</li>
+  <li>Description: {{ item.description }}</li>
+  <li>Done: {{ item.isDone }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+  There is no data here
+{% endif %}
+{% endblock content %}
