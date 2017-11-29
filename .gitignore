@@ -4,4 +4,4 @@ __pycache__/
 .pylintrc
 
 # ignore VS Code settings
-.vscode/
+.vscode
