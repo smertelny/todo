@@ -4,24 +4,20 @@
 
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-md-6">
-      {% if data %}
-      <ol>
-        {% for item in data %}
-        <li>
-          <ul>
-            <li><strong>Header:</strong> {{ item.header }}</li>
-            <li><strong>Description:</strong> {{ item.description }}</li>
-            <li><strong>Done:</strong> {{ item.isDone }}</li>
-          </ul>
-        </li>
-        {% endfor %}
-      </ol>
-      {% else %}
-        There is no data here
-      {% endif %}
-    </div>
-    </div>  
+  <div class='card-deck'>
+    {% for task in data %}
+      <div class="card mb-3">
+        <div class="card-header">Task #{{ forloop.counter }}</div>
+        <div class="card-body">
+          <h4 class="card-title">{{ task.header }}</h4>
+          <p class="card-text">{{ task.description }}</p>
+        </div>
+        <div class="card-footer">
+            <a class="card-link btn btn-success" href="#">Done</a>
+        </div>
+      </div>
+      {% cycle '' '' '' '</div><div class="card-deck">' %}
+    {% endfor %}
+  </div>
 </div>
 {% endblock content %}
