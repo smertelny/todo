@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_list_or_404
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib import messages
 
 from .models import TODO
 from .forms import CreateTaskForm
@@ -18,3 +19,11 @@ def new_task(request):
     else:
         form = CreateTaskForm()
     return render(request, 'todo/create_task.html', {'form': form})
+
+def make_task_done(request, pk):
+    if request.method == 'POST':
+        task = get_object_or_404(TODO, pk=pk)
+        task.isDone = True
+        task.save()
+        messages.add_message(request, messages.SUCCESS, 'Well done')
+        return HttpResponseRedirect(reverse('todo:index'))

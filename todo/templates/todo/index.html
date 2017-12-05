@@ -4,6 +4,13 @@
 
 {% block content %}
 <div class="container">
+  {% if messages %}
+    {% for msg in messages %}
+    <div class="alert {% if msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}alert-success{% endif %}" role="alert">
+      <strong>Congradulations!</strong> Task is now done.
+    </div>
+    {% endfor %}
+  {% endif %}
   <div class='card-deck'>
     {% for task in data %}
       <div class="card mb-3">
@@ -13,7 +20,10 @@
           <p class="card-text">{{ task.description }}</p>
         </div>
         <div class="card-footer">
-            <a class="card-link btn btn-success" href="#">Done</a>
+          <form method="post" action="{% url 'todo:make_done' task.pk %}">
+            {% csrf_token %}
+            <button class="card-link btn btn-success">Done</button>
+          </form>
         </div>
       </div>
       {% cycle '' '' '' '</div><div class="card-deck">' %}
