@@ -42,3 +42,25 @@ class TestIndexPage(TestCase):
         self.assertContains(resp, 'Second task')
         self.assertQuerysetEqual(resp.context['data'],\
         ['<TODO: Second>', '<TODO: First>'], ordered=False)
+
+
+class TestEditPage(TestCase):
+    def test_edit_page_without_tasks_created(self):
+        resp = self.client.get(reverse('todo:edit_task', kwargs={'pk': 1}))
+        self.assertEqual(resp.status_code, 404)
+
+    def test_edit_page_with_tasks_created(self):
+        create_task('Task', 'First task')
+        resp = self.client.get(reverse('todo:edit_task', kwargs={'pk': 1}))
+        form = resp.context.get('form')
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, 'Task')
+        self.assertContains(resp, 'First task')
+        self.assertFalse(form.errors)
+
+    def test_edit_data_in_wrong_way(self):
+        create_task('Task', 'First task')
+        resp = self.client.post(reverse('todo:edit_task', kwargs={'pk': 1}), {'header': ''})
+        
+        print(resp.context)
+        

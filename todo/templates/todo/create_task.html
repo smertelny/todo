@@ -5,9 +5,9 @@
 {% block content %}
 {{ form.non_field_errors }}
 <div class="container">
-    <form action="" method="post">
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <form action="" method="post" novalidate>
         {% csrf_token %}
-
         <div class="form-group">
             {{ form.header.errors}}
             <label for="{{ form.header.id_for_label }}">Task: </label>
