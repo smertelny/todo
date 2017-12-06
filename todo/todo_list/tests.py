@@ -45,22 +45,39 @@ class TestIndexPage(TestCase):
 
 
 class TestEditPage(TestCase):
+    def setUp(self):
+        create_task('Unique Task', 'First task')
+
     def test_edit_page_without_tasks_created(self):
-        resp = self.client.get(reverse('todo:edit_task', kwargs={'pk': 1}))
+        resp = self.client.get(reverse('todo:edit_task', kwargs={'pk': 2}))
         self.assertEqual(resp.status_code, 404)
+    
+    def test_csrf_token_presents(self):
+        resp = self.client.get(reverse('todo:edit_task', kwargs={'pk': 1}))
+        self.assertContains(resp, 'csrfmiddlewaretoken')
 
     def test_edit_page_with_tasks_created(self):
-        create_task('Task', 'First task')
         resp = self.client.get(reverse('todo:edit_task', kwargs={'pk': 1}))
         form = resp.context.get('form')
         self.assertEqual(resp.status_code, 200)
-        self.assertContains(resp, 'Task')
+        self.assertContains(resp, 'Unique Task')
         self.assertContains(resp, 'First task')
         self.assertFalse(form.errors)
 
-    def test_edit_data_in_wrong_way(self):
-        create_task('Task', 'First task')
+    def test_edit_task_in_wrong_way(self):
         resp = self.client.post(reverse('todo:edit_task', kwargs={'pk': 1}), {'header': ''})
-        
-        print(resp.context)
-        
+        form = resp.context.get('form')
+        self.assertEquals(resp.status_code, 200)
+        self.assertTrue(form.errors)
+    
+    def test_edit_task_with_valid_data_redirects(self):
+        resp = self.client.post(reverse('todo:edit_task', kwargs={'pk': 1}), {'header': 'New Header'})
+        self.assertRedirects(resp, reverse('todo:index'))
+
+    def test_edit_task_with_valid_data_changes_data(self):
+        resp = self.client.post(reverse('todo:edit_task', kwargs={'pk': 1}),
+            {'header': 'New Header', 'description': 'New description'}, follow=True)
+        self.assertContains(resp, 'New Header')
+        self.assertContains(resp, 'New description')
+        self.assertNotContains(resp, 'Unique Task')
+        self.assertNotContains(resp, 'First task')
