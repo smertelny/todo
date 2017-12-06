@@ -18,7 +18,7 @@ def new_task(request):
         return HttpResponseRedirect(reverse('todo:index'))
     else:
         form = CreateTaskForm()
-    return render(request, 'todo/create_task.html', {'form': form})
+    return render(request, 'todo/create_edit_task.html', {'form': form})
 
 def make_task_done(request, pk):
     if request.method == 'POST':
@@ -38,4 +38,4 @@ def edit(request, pk):
             return HttpResponseRedirect(reverse('todo:index'))
     else:
         form = CreateTaskForm(instance=data)
-    return render(request, 'todo/create_task.html', {'form': form})
+    return render(request, 'todo/create_edit_task.html', {'form': form})
