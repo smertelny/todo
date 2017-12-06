@@ -23,6 +23,9 @@
           <form method="post" action="{% url 'todo:make_done' task.pk %}">
             {% csrf_token %}
             <button class="card-link btn btn-success">Done</button>
+            <a class="card-link btn btn-info" href="{% url 'todo:edit_task' task.pk %}">
+              Edit
+            </a>
           </form>
         </div>
       </div>

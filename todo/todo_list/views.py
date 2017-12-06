@@ -27,3 +27,17 @@ def make_task_done(request, pk):
         task.save()
         messages.add_message(request, messages.SUCCESS, 'Well done')
         return HttpResponseRedirect(reverse('todo:index'))
+
+def edit(request, pk):
+    data = get_object_or_404(TODO, pk=pk)
+    if data.isDone:
+        return HttpResponseRedirect(reverse('todo:index'))
+
+    if request.method == "POST":
+        form = CreateTaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('todo:index'))
+    else:
+        form = CreateTaskForm(instance=data)
+    return render(request, 'todo/create_task.html', {'form': form})
