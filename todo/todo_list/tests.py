@@ -14,7 +14,7 @@ class TestIndexPage(TestCase):
     def test_no_items_in_todo_list(self):
         resp = self.client.get(reverse('todo:index'))
         self.assertEqual(resp.status_code, 200)
-        self.assertContains(resp, 'There is no data here')
+        self.assertContains(resp, 'You have no tasks yet')
         self.assertQuerysetEqual(resp.context['data'], [])
 
     def test_items_in_todo_list(self):
