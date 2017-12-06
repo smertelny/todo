@@ -3,15 +3,18 @@
 {% block title %}Create new task{% endblock title %}
 
 {% block content %}
-{{ form.non_field_errors }}
 <div class="container">
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-    <form action="" method="post" novalidate>
+    {{ form.non_field_errors }}
+    <form method="post" novalidate> 
         {% csrf_token %}
         <div class="form-group">
-            {{ form.header.errors}}
+            
             <label for="{{ form.header.id_for_label }}">Task: </label>
             {{ form.header }}
+            {% if form.header.errors %}
+            <script>document.getElementById("{{ form.header.id_for_label }}").className += ' is-invalid'</script>
+            <div class="invalid-feedback">{{ form.header.errors }}</div>
+            {% endif %}
         </div>
 
         <div class="form-group">
