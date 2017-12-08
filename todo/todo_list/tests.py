@@ -11,6 +11,7 @@ class TestIndexPage(TestCase):
         resp = self.client.get(reverse('todo:index'))
         self.assertEquals(resp.status_code, 200)
 
+
     def test_no_items_in_todo_list(self):
         resp = self.client.get(reverse('todo:index'))
         self.assertEqual(resp.status_code, 200)
@@ -42,6 +43,35 @@ class TestIndexPage(TestCase):
         self.assertContains(resp, 'Second task')
         self.assertQuerysetEqual(resp.context['data'],\
         ['<TODO: Second>', '<TODO: First>'], ordered=False)
+
+
+class TestNewTaskPage(TestCase):
+    def test_new_task_page_responding(self):
+        resp = self.client.get(reverse('todo:new_task'))
+        self.assertEqual(resp.status_code, 200)
+
+    def test_csrf_token_presents(self):
+        resp = self.client.get(reverse('todo:new_task'))
+        self.assertContains(resp, 'csrfmiddlewaretoken')
+
+    def test_form_raises_error_with_missing_data(self):
+        resp = self.client.post(reverse('todo:new_task'), {}, follow=True)
+        form = resp.context.get('form')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(form.errors)
+        self.assertFormError(resp, 'form', 'header',  'This field is required.')
+
+    def test_form_without_description_data(self):
+        resp = self.client.post(reverse('todo:new_task'), {'header': "My New Task"}, follow=True)
+        self.assertEqual(resp.status_code, 200)
+        self.assertRedirects(resp, reverse('todo:index'))
+        self.assertTrue(TODO.objects.exists())
+    
+    def test_form_creates_new_task_with_full_data(self):
+        resp = self.client.post(reverse('todo:new_task'), {'header':'My New Task', 'description':'This is my new task'}, follow=True)
+        self.assertRedirects(resp, reverse('todo:index'))
+        self.assertContains(resp, "My New Task")
+        self.assertTrue(TODO.objects.exists())
 
 
 class TestEditPage(TestCase):
@@ -81,3 +111,22 @@ class TestEditPage(TestCase):
         self.assertContains(resp, 'New description')
         self.assertNotContains(resp, 'Unique Task')
         self.assertNotContains(resp, 'First task')
+
+
+class TestDonePage(TestCase):
+    def setUp(self):
+        self.task =create_task("New task", "This task is new")
+
+    def test_404_if_there_task_is_not_created(self):
+        resp = self.client.post(reverse('todo:make_done', kwargs={'pk': 100}), {})
+        self.assertEqual(resp.status_code, 404)
+
+    def test_done_task_page_not_allowed_method(self):
+        resp = self.client.get(reverse('todo:make_done', kwargs={'pk' : 1}))
+        self.assertEqual(resp.status_code, 405)
+    
+    # def test_done_task_showing_warning_if_task_already_done(self):
+    #     self.task.isDone = True
+    #     resp = self.client.post(reverse('todo:make_done', kwargs={'pk': 1}), follow=True)
+    #     self.assertContains(resp, "The Task is already done")
+    # TODO Edit test and understand how to test messages in Django
