@@ -4,42 +4,42 @@
 
 {% block content %}
 <div class="container">
-  {% if data %}
-    {% if messages %}
-      {% for msg in messages %}
-      {% if msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-      <div class="alert alert-success" role="alert">
-        <strong>Congradulations!</strong> Task is now done.
-      </div>
-      {% endif %}
-      {% if msg.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-      <div class="alert alert-warning" role="alert">
-        <strong>Opps!</strong> The Task is already done.
-      </div>
-      {% endif %}
-      {% endfor %}
-    {% endif %}
-    <div class='card-deck'>
-      {% for task in data %}
-        <div class="card mb-3">
-          <div class="card-header">Task #{{ forloop.counter }}</div>
-          <div class="card-body">
-            <h4 class="card-title">{{ task.header }}</h4>
-            <p class="card-text">{{ task.description }}</p>
-          </div>
-          <div class="card-footer">
-            <form method="post" action="{% url 'todo:make_done' task.pk %}">
-              {% csrf_token %}
-              <button class="card-link btn btn-success">Done</button>
-              <a href="{% url 'todo:edit_task' task.pk %}" class="btn btn-info">Edit</a>
-            </form>
-          </div>
-        </div>
-        {% cycle '' '' '' '</div><div class="card-deck">' %}
-      {% endfor %}
+  {% if messages %}
+    {% for msg in messages %}
+    {% if msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+    <div class="alert alert-success" role="alert">
+      <strong>Congradulations!</strong> Task is now done.
     </div>
-    {% else %}
-    <h1>You have no tasks yet</h1>
     {% endif %}
+    {% if msg.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+    <div class="alert alert-warning" role="alert">
+      <strong>Opps!</strong> The Task is already done.
+    </div>
+    {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% if data %}
+  <div class='card-deck'>
+    {% for task in data %}
+      <div class="card mb-3">
+        <div class="card-header">Task #{{ forloop.counter }}</div>
+        <div class="card-body">
+          <h4 class="card-title">{{ task.header }}</h4>
+          <p class="card-text">{{ task.description }}</p>
+        </div>
+        <div class="card-footer">
+          <form method="post" action="{% url 'todo:make_done' task.pk %}">
+            {% csrf_token %}
+            <button class="card-link btn btn-success">Done</button>
+            <a href="{% url 'todo:edit_task' task.pk %}" class="btn btn-info">Edit</a>
+          </form>
+        </div>
+      </div>
+      {% cycle '' '' '' '</div><div class="card-deck">' %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <h1>You have no tasks yet</h1>
+  {% endif %}
 </div>
 {% endblock content %}

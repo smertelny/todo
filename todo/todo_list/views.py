@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import TODO
 from .forms import CreateTaskForm
@@ -21,6 +22,7 @@ def new_task(request):
         form = CreateTaskForm()
     return render(request, 'todo/create_edit_task.html', {'form': form})
 
+@csrf_exempt
 @require_POST
 def make_task_done(request, pk):
     if request.method == 'POST':
