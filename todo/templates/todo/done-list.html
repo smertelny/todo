@@ -28,10 +28,9 @@
           <p class="card-text">{{ task.description }}</p>
         </div>
         <div class="card-footer">
-          <form method="post" action="{% url 'todo:make_done' task.pk %}">
+          <form method="post" action="{% url 'todo:make_in_progress' task.pk %}">
             {% csrf_token %}
-            <button class="card-link btn btn-success">Done</button>
-            <a href="{% url 'todo:edit_task' task.pk %}" class="btn btn-info">Edit</a>
+            <button class="card-link btn btn-warning">In Progress</button>
           </form>
         </div>
       </div>
@@ -39,7 +38,7 @@
     {% endfor %}
   </div>
   {% else %}
-  <h1>You have no tasks yet</h1>
+  <h1>You have no done tasks</h1>
   {% endif %}
 </div>
 {% endblock content %}

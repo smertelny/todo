@@ -17,7 +17,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'todo:new_task' %}">New Task</a>
+                        <a class="nav-link{% if active == 'new task' %} active{% endif %}" href="{% url 'todo:new_task' %}">New Task</a>
+                    </li>
+                    <li>
+                        <a class="nav-link{% if active == 'done tasks'%} active{% endif %}" href="{% url 'todo:done_list' %}">Done tasks</a>
                     </li>
                     </ul>
                 </div>
