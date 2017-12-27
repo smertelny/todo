@@ -25,7 +25,7 @@
         <div class="card-header">Task #{{ forloop.counter }}</div>
         <div class="card-body">
           <h4 class="card-title">{{ task.header }}</h4>
-          <p class="card-text">{{ task.description }}</p>
+          <p class="card-text">{{ task.description|linebreaksbr }}</p>
         </div>
         <div class="card-footer">
           <form method="post" action="{% url 'todo:make_done' task.pk %}">

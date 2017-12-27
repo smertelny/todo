@@ -7,3 +7,6 @@ class TODO(models.Model):
 
     def __str__(self):
         return self.header
+
+    class Meta:
+        ordering = ('-pk',)

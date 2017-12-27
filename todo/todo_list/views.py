@@ -8,7 +8,7 @@ from .models import TODO
 from .forms import CreateTaskForm
 
 def index(request):
-    data = TODO.objects.filter(isDone=False).order_by('-pk')
+    data = TODO.objects.filter(isDone=False)
     return render(request, "todo/index.html", {"data":data})
 
 def new_task(request):
