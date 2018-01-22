@@ -8,3 +8,6 @@ __pycache__/
 
 #ignoring local db
 db.sqlite3
+
+# Ignore NodeJS files
+node_modules/

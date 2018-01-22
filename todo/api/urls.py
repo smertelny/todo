@@ -8,5 +8,5 @@ router = DefaultRouter()
 router.register(r'todo', ToDoViewSet)
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    url(r'^v1/', include(router.urls)),
 ]
